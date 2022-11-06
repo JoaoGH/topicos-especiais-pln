@@ -50,10 +50,6 @@ def readFiles():
     df = pd.read_csv(fileName, delimiter=';', encoding="ansi")
     df.columns = ['date', 'text', 'user', 'location']
 
-    date = df['date']
-    text = df['text']
-    user = df['user']
-
     return df
 
 def lowerCase(corpus):
