@@ -53,12 +53,9 @@ def readFiles():
     return df
 
 def lowerCase(corpus):
-    lowers = []
+    corpus["text"] = corpus["text"].str.lower()
     
-    for it in corpus:
-        lowers.append(it.lower())
-    
-    return lowers
+    return corpus
 
 def removeSpecialChar(corpus):
     noSpecial = []
