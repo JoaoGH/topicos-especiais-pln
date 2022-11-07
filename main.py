@@ -83,8 +83,9 @@ def identifyEntities(corpus):
         v = []
         for ent in doc.ents:
             v.append([ent.text, ent.label_])
-        f.write(str(v))
-        f.write("\n")
+        if v:
+            f.write(str(v))
+            f.write("\n")
 
     f.close()
 
