@@ -1,11 +1,7 @@
-##from tweepy import *
-import tweepy 
+import tweepy
 import pandas as pd
 import csv
-import re 
-import string
-import preprocessor as p
-import nltk
+import re
 import spacy
 import os
 
