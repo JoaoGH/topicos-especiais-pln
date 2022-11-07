@@ -68,14 +68,6 @@ def removeSpecialChar(corpus):
 
     return corpus
 
-def tokenizar(text):
-    tokens = []
-    
-    for it in text:
-        temp = nltk.tokenize.word_tokenize(it)
-        tokens.append(temp)
-
-    return tokens
 
 dataFrame = readFiles()
 lista = []
@@ -88,13 +80,6 @@ for it in texts:
 print(len(lista))
 
 lista = removeSpecialChar(lista)
-
-tokens = tokenizar(lista)
-
-
-print(len(lista))
-print(len(tokens))
-print(lista)
 
 nlp = spacy.load("en_core_web_sm")
 
