@@ -66,7 +66,12 @@ def removeSpecialChar(corpus):
     return corpus
 
 def textCleaning(corpus):
-    dictionary = ["lazarus"]
+    dictionary = []
+
+    f = open('dictionary.txt', 'r')
+    for line in f:
+        dictionary.append(line.strip().lower())
+    f.close()
 
     corpus = corpus[corpus["text"].str.contains("|".join(dictionary), case=False)]
 
