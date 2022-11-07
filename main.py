@@ -68,32 +68,21 @@ def removeSpecialChar(corpus):
 
     return corpus
 
+def textCleaning(corpus):
+    dictionary = ["lazarus"]
+
+    corpus = corpus[corpus["text"].str.contains("|".join(dictionary), case=False)]
+
+    return corpus
 
 dataFrame = readFiles()
-lista = []
-texts = lowerCase(dataFrame['text'])
+print(len(dataFrame))
 
-for it in texts:
-    if "lazarus" in it:
-        lista.append(it)
+dataFrame = lowerCase(dataFrame)
+dataFrame = textCleaning(dataFrame)
+dataFrame = removeSpecialChar(dataFrame)
 
-print(len(lista))
-
-lista = removeSpecialChar(lista)
-
-nlp = spacy.load("en_core_web_sm")
-
-f = open("test.txt", "w")
-
-for item in lista:
-    doc = nlp(item)
-    v = []
-    for ent in doc.ents:
-        v.append([ent.text, ent.label_])
-    f.write(str(v))
-    f.write("\n")
-
-f.close()
+print(len(dataFrame))
 
 print('end')
 
