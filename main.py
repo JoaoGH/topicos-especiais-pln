@@ -75,12 +75,31 @@ def textCleaning(corpus):
 
     return corpus
 
+def identifyEntities(corpus):
+    nlp = spacy.load("en_core_web_sm")
+
+    f = open("entities.txt", "w")
+
+    lista = corpus["text"]
+
+    for item in lista:
+        doc = nlp(item)
+        v = []
+        for ent in doc.ents:
+            v.append([ent.text, ent.label_])
+        f.write(str(v))
+        f.write("\n")
+
+    f.close()
+
 dataFrame = readFiles()
 print(len(dataFrame))
 
 dataFrame = lowerCase(dataFrame)
 dataFrame = textCleaning(dataFrame)
 dataFrame = removeSpecialChar(dataFrame)
+
+identifyEntities(dataFrame)
 
 print(len(dataFrame))
 
