@@ -26,7 +26,6 @@ def findTweet():
         csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'),tweet.user.screen_name.encode('utf-8'), tweet.user.location.encode('utf-8')])
 
 def readFiles():
-
     nomeArquivos = os.listdir("./corpus/")
 
     fileName = "./corpus/all.csv"
@@ -35,12 +34,14 @@ def readFiles():
         os.remove(fileName)
 
     f2 = open(fileName, "a")
-    f2.write("date;text;user;location\n\n")
+    f2.write("date;text;user;location\n")
 
     for it in nomeArquivos:
-        f1 = open("./corpus/" + it, "r")
-        f2.write(f1.read())
-        f1.close()
+        with open("./corpus/" + it, "r") as reader:
+            for line in reader:
+                if line.strip():
+                    f2.write(line)
+            f2.truncate()
     f2.close()
 
     df = pd.read_csv(fileName, delimiter=';', encoding="ansi")
