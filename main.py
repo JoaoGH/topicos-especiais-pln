@@ -70,7 +70,7 @@ def removeSpecialChar(corpus):
 def textCleaning(corpus):
     dictionary = []
 
-    f = open('dictionary.txt', 'r')
+    f = open('groups_dictionary.txt', 'r')
     for line in f:
         dictionary.append(line.strip().lower())
     f.close()
