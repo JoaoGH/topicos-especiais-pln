@@ -1,7 +1,12 @@
 admin@338
+Ajax Security
 Ajax Security Team
+AjaxSecurity Team
+Ajax SecurityTeam
+AjaxSecurityTeam
 ALLANITE
 Andariel
+APT
 APT-C-36
 APT1
 APT12
@@ -19,34 +24,64 @@ APT37
 APT38
 APT39
 APT41
+Aquatic
 Aquatic Panda
+AquaticPanda
 Axiom
 BackdoorDiplomacy
+Backdoor Diplomacy
 BlackOasis
+Black Oasis
 BlackTech
+Black Tech
 Blue Mockingbird
+BlueMockingbird
 Bouncing Golf
+BouncingGolf
 BRONZE BUTLER
+BRONZEBUTLER
 Carbanak
+Charming Kitten3
+CharmingKitten3
 Chimera
 Cleaver
 Cobalt
 Cobalt Group
+Cobalt Team
+CobaltTeam
+CobaltGroup
 Confucius
 CopyKittens
+Copy Kittens
 CostaRicto
+Costa Ricto
 Dark Caracal
 Darkhotel
 DarkHydrus
 DarkVishnya
 Deep Panda
+DiceyF
+Domestic Kitten
+DomesticKitten
 Dragonfly
 DragonOK
+Dragon OK
 Dust Storm
+DustStorm
 Elderwood
+Elfin3
 Equation
+Equation Group
+EquationGroup
+Equation3
 Evilnum
+Fancy
+Fancy Bear
+FancyBear
+Fancy3
+Fancy4
 Ferocious Kitten
+FerociousKitten
 FIN10
 FIN4
 FIN5
@@ -54,15 +89,21 @@ FIN6
 FIN7
 FIN8
 Fox Kitten
+FoxKitten
 Frankenstein
 GALLIUM
 Gallmaker
 Gamaredon
 Gamaredon Group
+GamaredonGroup
 GCMAN
 GOLD SOUTHFIELD
+GOLDSOUTHFIELD
 Gorgon
 Gorgon Group
+GorgonGroup
+Group-1314
+Group-3390
 Group5
 HAFNIUM
 HEXANE
@@ -70,75 +111,48 @@ Higaisa
 Honeybee
 Inception
 IndigoZebra
+Indrik
 Indrik Spider
+IndrikSpider
+Iranian Threat
+Iranian Threat Group
+IranianThreat Group
+Iranian ThreatGroup
+IranianThreatGroup
 Ke3chang
 Kimsuky
+Kitten3
 Lazarus
 Lazarus Group
+lazarus3
+LazarusGroup
 LazyScripter
 Leafminer
 Leviathan
 Lotus Blossom
+LotusBlossom
 Machete
 Magic Hound
+MagicHound
 menuPass
+menu Pass
 Moafee
 Mofang
 Molerats
 MuddyWater
+Muddy Water
 Mustang Panda
+MustangPanda
 Naikon
 NEODYMIUM
 Night Dragon
+NightDragon
 Nomadic Octopus
+NomadicOctopus
 OilRig
 Operation Wocao
+OperationWocao
 Orangeworm
 Patchwork
 PittyTiger
-PLATINUM
-Poseidon
-Poseidon Group
-PROMETHIUM
-Putter Panda
-Rancor
-Rocke
-RTM
-Sandworm Team
-Scarlet Mimic
-Sharpshooter
-Sidewinder
-Silence
-Silent Librarian
-SilverTerrier
-Sowbug
-Stealth Falcon
-Strider
-Suckfly
-TA459
-TA505
-TA551
-TeamTNT
-TEMP.Veles
-The White Company
-Threat
-Group-1314
-Threat Group-1314
-Group-3390
-Threat Group-3390
-Thrip
-Tonto Team
-Transparent Tribe
-Tropic Trooper
-Turla
-Volatile Cedar
-Whitefly
-Windigo
-Windshift
-Winnti
-Winnti Group
-WIRTE
-Wizard Spider
-ZIRCONIUM
-Equation
-Equation Group
+Pitty Tiger
