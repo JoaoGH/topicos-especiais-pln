@@ -33,19 +33,21 @@ def readFiles():
     if os.path.isfile(fileName):
         os.remove(fileName)
 
-    f2 = open(fileName, "a")
-    f2.write("date;text;user;location\n")
+    fileAllTweets = open(fileName, "a")
+    fileAllTweets.write("id;date;text;user;location\n")
 
+    i = 0
     for it in nomeArquivos:
         with open("./corpus/" + it, "r") as reader:
             for line in reader:
                 if line.strip():
-                    f2.write(line)
-            f2.truncate()
-    f2.close()
+                    i = i + 1
+                    fileAllTweets.write(str(i) + ";" + line)
+            fileAllTweets.truncate()
+    fileAllTweets.close()
 
     df = pd.read_csv(fileName, delimiter=';', encoding="ansi")
-    df.columns = ['date', 'text', 'user', 'location']
+    df.columns = ['id', 'date', 'text', 'user', 'location']
 
     return df
 
@@ -84,13 +86,15 @@ def identifyEntities(corpus):
 
     lista = corpus["text"]
 
+    i = 0
     for item in lista:
         doc = nlp(item)
+        i = i + 1
         v = []
         for ent in doc.ents:
             v.append([ent.text, ent.label_])
         if v:
-            f.write(str(v))
+            f.write(str(i) + ";" + str(v))
             f.write("\n")
 
     f.close()
