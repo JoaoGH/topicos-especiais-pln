@@ -1,3 +1,5 @@
+import time
+
 import tweepy
 import pandas as pd
 import csv
@@ -99,17 +101,43 @@ def identifyEntities(corpus):
 
     f.close()
 
-dataFrame = readFiles()
-print(len(dataFrame))
+def pipeline():
+    print("Executando pipeline...")
 
-dataFrame = lowerCase(dataFrame)
-dataFrame = textCleaning(dataFrame)
-dataFrame = removeSpecialChar(dataFrame)
+    dataFrame = readFiles()
 
-identifyEntities(dataFrame)
+    dataFrame = lowerCase(dataFrame)
+    dataFrame = textCleaning(dataFrame)
+    dataFrame = removeSpecialChar(dataFrame)
 
-print(len(dataFrame))
+    identifyEntities(dataFrame)
 
-print('end')
+    print("Pipeline executado com sucesso.")
+    time.sleep(3)
+    print()
+
+
+opc = 0
+while opc != 4:
+    print()
+    print("--------- Topicos Especiais - NLP ---------")
+    print("1 - Buscar tweets")
+    print("2 - Executar pipeline")
+    print("3 - Analisar dados")
+    print("4 - Sair")
+    opc = int(input())
+    print()
+
+    if opc == 1:
+        print("chamar findTweet")
+        time.sleep(2)
+    elif opc == 2:
+        pipeline()
+    elif opc == 3:
+        print("exibir graficos")
+        time.sleep(2)
+
+
+
 
 
