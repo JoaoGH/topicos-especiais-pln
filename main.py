@@ -37,15 +37,15 @@ def findTweet():
             dictionary.append(line.strip().lower())
         search_words = " OR ".join(dictionary)
 
-    new_search = search_words + " -filter:retweets"
-
     print("Realizando busca dos tweets...")
-    max = 0
-    for tweet in tweepy.Cursor(api.search_tweets,q=new_search,count=100,lang="en",since_id=0,include_entities=True).items():
-        max = max + 1
-        if (max == 500):
-            break
-        csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'),tweet.user.screen_name.encode('utf-8'), tweet.user.location.encode('utf-8')])
+    for it in search_words:
+        new_search = it + " -filter:retweets"
+        max = 0
+        for tweet in tweepy.Cursor(api.search_tweets, q=new_search, count=400, lang="en", since_id=0, include_entities=True).items():
+            max = max + 1
+            if (max == 500):
+                break
+            csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'), tweet.user.screen_name.encode('utf-8'), tweet.user.location.encode('utf-8')])
     print("Busca finalizada com sucesso.")
 
 def readFiles():
