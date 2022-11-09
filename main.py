@@ -28,14 +28,12 @@ def findTweet():
     opc = int(input())
     if (opc == 1):
         palavras = input("\tEntre com uma lista de argumentos para busca separados por ','")
-        palavras = palavras.split(",")
-        search_words = " OR ".join(palavras)
+        search_words = palavras.split(",")
     else:
         f = open("attacks_dictionary.txt", 'r')
-        dictionary = []
+        search_words = []
         for line in f:
-            dictionary.append(line.strip().lower())
-        search_words = " OR ".join(dictionary)
+            search_words.append(line.strip().lower())
 
     print("Realizando busca dos tweets...")
     for it in search_words:
