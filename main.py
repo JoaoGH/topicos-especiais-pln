@@ -1,5 +1,5 @@
 import time
-
+from datetime import datetime
 import tweepy
 import pandas as pd
 import csv
@@ -17,15 +17,36 @@ def findTweet():
     auth.set_access_token(access_key, access_secret)
     
     api = tweepy.API(auth,wait_on_rate_limit=True)
-    
-    csvFile = open('file-name', 'w')
+
+    filename = str(datetime.now().replace(microsecond=0).isoformat()).replace(':', '-')
+    csvFile = open('./corpus/' + filename, 'w')
     csvWriter = csv.writer(csvFile,delimiter=";")
-    
-    search_words = "cyberattack OR \"zero day\" OR ramsonware" # enter your words
+
+    search_words = ""
+    print("1 - Informar argumentos para a busca")
+    print("2 - Realizar busca com base no dicionario")
+    opc = int(input())
+    if (opc == 1):
+        palavras = input("\tEntre com uma lista de argumentos para busca separados por ','")
+        palavras = palavras.split(",")
+        search_words = " OR ".join(palavras)
+    else:
+        f = open("attacks_dictionary.txt", 'r')
+        dictionary = []
+        for line in f:
+            dictionary.append(line.strip().lower())
+        search_words = " OR ".join(dictionary)
+
     new_search = search_words + " -filter:retweets"
-    
+
+    print("Realizando busca dos tweets...")
+    max = 0
     for tweet in tweepy.Cursor(api.search_tweets,q=new_search,count=100,lang="en",since_id=0,include_entities=True).items():
+        max = max + 1
+        if (max == 500):
+            break
         csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'),tweet.user.screen_name.encode('utf-8'), tweet.user.location.encode('utf-8')])
+    print("Busca finalizada com sucesso.")
 
 def readFiles():
     nomeArquivos = os.listdir("./corpus/")
@@ -129,8 +150,7 @@ while opc != 4:
     print()
 
     if opc == 1:
-        print("chamar findTweet")
-        time.sleep(2)
+        findTweet()
     elif opc == 2:
         pipeline()
     elif opc == 3:
