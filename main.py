@@ -59,6 +59,8 @@ def readFiles():
 
     i = 0
     for it in nomeArquivos:
+        if (it == "all.csv"):
+            continue
         with open("./corpus/" + it, "r") as reader:
             for line in reader:
                 if line.strip():
