@@ -102,9 +102,14 @@ def textCleaning(corpus):
 
     return corpus
 
-def identifyEntities(corpus):
+def doIdentifications(corpus):
     nlp = spacy.load("en_core_web_sm")
+    identify(corpus, nlp)
 
+    nlp = spacy.load("./model-best/")
+    identify(corpus, nlp)
+
+def identify(corpus, nlp):
     f = open("entities.txt", "w")
 
     lista = corpus["text"]
@@ -131,7 +136,7 @@ def pipeline():
     dataFrame = textCleaning(dataFrame)
     dataFrame = removeSpecialChar(dataFrame)
 
-    identifyEntities(dataFrame)
+    doIdentifications(dataFrame)
 
     print("Pipeline executado com sucesso.")
     time.sleep(3)
