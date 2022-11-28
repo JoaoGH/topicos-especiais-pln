@@ -81,7 +81,7 @@ def lowerCase(corpus):
 
 def removeSpecialChar(corpus):
     linkRegex = r"(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)"
-    noSpecialRegex = r"[^a-zA-Z0-9 \.\,\']"
+    noSpecialRegex = r"[^a-zA-Z0-9 \.\,\'\@]"
     hexValue = r"\\[xX]{1}[abcdefABCDEF0-9]{2}"
     byteRegex = r"^(['\"]?b['\"])"
 
