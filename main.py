@@ -119,6 +119,11 @@ def doIdentifications(corpus):
     nlp = spacy.load("custom-models/attack-model/")
     identify(corpus, nlp, fileName)
 
+    fileName = "identification-3.txt"
+
+    nlp = spacy.load("custom-models/group-model/")
+    identify(corpus, nlp, fileName)
+
 def identify(corpus, nlp, fileName):
     f = open(fileName, "w")
 
