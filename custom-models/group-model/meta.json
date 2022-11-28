@@ -1,0 +1,89 @@
+{
+  "lang":"en",
+  "name":"pipeline",
+  "version":"0.0.0",
+  "spacy_version":">=3.4.2,<3.5.0",
+  "description":"",
+  "author":"",
+  "email":"",
+  "url":"",
+  "license":"",
+  "spacy_git_version":"3d0e89536",
+  "vectors":{
+    "width":300,
+    "vectors":20000,
+    "keys":514157,
+    "name":"en_vectors",
+    "mode":"default"
+  },
+  "labels":{
+    "tok2vec":[
+
+    ],
+    "ner":[
+      "APT 33",
+      "APT 39",
+      "Charming Kitten",
+      "DiceyF",
+      "Elfin",
+      "Equation Group",
+      "Fancy Bear",
+      "Lazarus Group"
+    ]
+  },
+  "pipeline":[
+    "tok2vec",
+    "ner"
+  ],
+  "components":[
+    "tok2vec",
+    "ner"
+  ],
+  "disabled":[
+
+  ],
+  "performance":{
+    "ents_f":0.7619047619,
+    "ents_p":0.8888888889,
+    "ents_r":0.6666666667,
+    "ents_per_type":{
+      "Lazarus Group":{
+        "p":1.0,
+        "r":0.5,
+        "f":0.6666666667
+      },
+      "Rattle Snake":{
+        "p":0.0,
+        "r":0.0,
+        "f":0.0
+      },
+      "DiceyF":{
+        "p":1.0,
+        "r":1.0,
+        "f":1.0
+      },
+      "APT 33":{
+        "p":1.0,
+        "r":0.6666666667,
+        "f":0.8
+      },
+      "Charming Kitten":{
+        "p":0.75,
+        "r":1.0,
+        "f":0.8571428571
+      },
+      "Fancy Bear":{
+        "p":1.0,
+        "r":1.0,
+        "f":1.0
+      },
+      "Equation Group":{
+        "p":0.0,
+        "r":0.0,
+        "f":0.0
+      }
+    },
+    "tok2vec_loss":2.0085949349,
+    "ner_loss":82.193057904
+  }
+}
