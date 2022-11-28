@@ -188,22 +188,78 @@ def showGraphics():
     analiticsJson = {}
 
 def prepareDataToShow():
-    f = open("identification.txt", "r")
+    analiticsJson = prepareDataGroups()
+    analiticsJson = prepareDataMethods(analiticsJson)
+    analiticsJson = prepareDataTargets(analiticsJson)
+
+    return analiticsJson
+
+def prepareDataGroups():
+    f = open("./entities/identification-groups.txt", "r")
 
     analiticsJson["groups"] = []
-    for line in f:
+    id = 0
+
+    for line in f.readlines():
         obj = {}
 
-        obj["id"] = int(line.split(";")[0])
+        id += 1
+        obj["id"] = id
 
         for it in eval(line.split(";")[1]):
-            if it[1] in ("GPE", "ORG"):
-                obj[it[1]] = it[0]
+            existente = [x for x in analiticsJson["groups"] if it[1] == x["name"]]
+            if not existente:
+                obj["name"] = it[1]
+            else:
+                existente[0]["tweets"].append(int(line.split(";")[0]))
+                continue
+            if not "tweets" in obj.keys():
+                obj["tweets"] = []
+            obj["tweets"].append(int(line.split(";")[0]))
 
         if len(obj.keys()) > 1:
             analiticsJson.get("groups").append(obj)
 
     f.close()
+
+    return analiticsJson
+
+def prepareDataMethods(analiticsJson):
+    f = open("./entities/identification-attacks.txt", "r")
+
+    for line in f.readlines():
+        tweet = int(line.split(";")[0])
+        for it in eval(line.split(";")[1]):
+            temp = [x for x in analiticsJson["groups"] if tweet in x["tweets"]]
+            for object in temp:
+                if "methods" not in object.keys():
+                    object["methods"] = {}
+                if it[1] not in object["methods"].keys():
+                    object["methods"][it[1]] = 0
+                object["methods"][it[1]] = object["methods"][it[1]] + 1
+
+    f.close()
+
+    return analiticsJson
+
+def prepareDataTargets(analiticsJson):
+    f = open("./entities/identification-targets.txt", "r")
+
+    for line in f.readlines():
+        tweet = int(line.split(";")[0])
+        for it in eval(line.split(";")[1]):
+            if it[1] in ("GPE", "ORG", "NORP"):
+                print(it)
+                temp = [x for x in analiticsJson["groups"] if tweet in x["tweets"]]
+                for object in temp:
+                    if "targets" not in object.keys():
+                        object["targets"] = []
+                    if it[0] not in object["targets"]:
+                        object["targets"].append(it[0])
+
+    f.close()
+
+    return analiticsJson
 
 analiticsJson = {}
 dataFrame = None
