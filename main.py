@@ -250,7 +250,6 @@ def prepareDataTargets(analiticsJson):
         tweet = int(line.split(";")[0])
         for it in eval(line.split(";")[1]):
             if it[1] in ("GPE", "ORG", "NORP"):
-                print(it)
                 temp = [x for x in analiticsJson["groups"] if tweet in x["tweets"]]
                 for object in temp:
                     if "targets" not in object.keys():
