@@ -145,6 +145,29 @@ def pipeline():
     print()
     return dataFrame
 
+def showGraphics():
+    prepareDataToShow()
+    analiticsJson = {}
+
+def prepareDataToShow():
+    f = open("identification.txt", "r")
+
+    analiticsJson["groups"] = []
+    for line in f:
+        obj = {}
+
+        obj["id"] = int(line.split(";")[0])
+
+        for it in eval(line.split(";")[1]):
+            if it[1] in ("GPE", "ORG"):
+                obj[it[1]] = it[0]
+
+        if len(obj.keys()) > 1:
+            analiticsJson.get("groups").append(obj)
+
+    f.close()
+
+analiticsJson = {}
 dataFrame = None
 opc = 0
 while opc != 4:
@@ -162,8 +185,7 @@ while opc != 4:
     elif opc == 2:
         dataFrame = pipeline()
     elif opc == 3:
-        print("exibir graficos")
-        time.sleep(2)
+        showGraphics()
 
 
 
