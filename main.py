@@ -103,26 +103,27 @@ def textCleaning(corpus):
     return corpus
 
 def doIdentifications(corpus):
+    fileName = "identification.txt"
+
     nlp = spacy.load("en_core_web_sm")
-    identify(corpus, nlp)
+    identify(corpus, nlp, fileName)
+
+    fileName = "identification-2.txt"
 
     nlp = spacy.load("./model-best/")
-    identify(corpus, nlp)
+    identify(corpus, nlp, fileName)
 
-def identify(corpus, nlp):
-    f = open("entities.txt", "w")
+def identify(corpus, nlp, fileName):
+    f = open(fileName, "w")
 
-    lista = corpus["text"]
-
-    i = 0
-    for item in lista:
-        doc = nlp(item)
-        i = i + 1
+    for i in range(0, len(corpus)):
+        doc = nlp(corpus.iloc[i].text)
+        id = corpus.iloc[i].id
         v = []
         for ent in doc.ents:
             v.append([ent.text, ent.label_])
         if v:
-            f.write(str(i) + ";" + str(v))
+            f.write(str(id) + ";" + str(v))
             f.write("\n")
 
     f.close()
@@ -139,10 +140,10 @@ def pipeline():
     doIdentifications(dataFrame)
 
     print("Pipeline executado com sucesso.")
-    time.sleep(3)
     print()
+    return dataFrame
 
-
+dataFrame = None
 opc = 0
 while opc != 4:
     print()
@@ -157,7 +158,7 @@ while opc != 4:
     if opc == 1:
         findTweet()
     elif opc == 2:
-        pipeline()
+        dataFrame = pipeline()
     elif opc == 3:
         print("exibir graficos")
         time.sleep(2)
