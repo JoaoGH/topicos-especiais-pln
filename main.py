@@ -157,36 +157,34 @@ def pipeline():
 def showGraphics():
     analiticsJson = prepareDataToShow()
 
-    # pw = window.plotWindow()
-    # for group in analiticsJson["groups"]:
-    #     ataques = group["methods"].keys()
-    #     total = group["methods"].values()
-    #     figure = plt.figure()
-    #     plt.bar(ataques, total)
-    #     plt.ylabel("Total ataques")
-    #     plt.xlabel("Tipos de ataques")
-    #     pw.addPlot(group["name"], figure)
-    #     print(group)
-    #
-    #
-    # ## -------------------
-    #
-    # text = open("identification.txt", "r").read()
-    # # wordcloud = WordCloud().generate(text)
-    # # plt.imshow(wordcloud, interpolation='bilinear')
-    # # plt.axis("off")
-    # x, y = numpy.ogrid[:300, :300]
-    # mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
-    # mask = 255 * mask.astype(int)
-    # wordcloud = WordCloud(background_color="white", max_font_size=40, mask=mask).generate(text)
-    # # plt.figure()
-    #
-    # figure = plt.figure()
-    # plt.imshow(wordcloud, interpolation="bilinear")
-    # plt.axis("off")
-    # pw.addPlot("Bag", figure)
-    #
-    # pw.show()
+    pw = window.plotWindow()
+    for group in analiticsJson["groups"]:
+        ataques = group["methods"].keys()
+        total = group["methods"].values()
+        figure = plt.figure()
+        plt.bar(ataques, total)
+        plt.ylabel("Total ataques")
+        plt.xlabel("Tipos de ataques")
+        pw.addPlot(group["name"], figure)
+
+    ## -------------------
+
+    for group in analiticsJson["groups"]:
+        text = "\n".join(group["targets"])
+        # wordcloud = WordCloud().generate(text)
+        # plt.imshow(wordcloud, interpolation='bilinear')
+        # plt.axis("off")
+        x, y = numpy.ogrid[:300, :300]
+        mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
+        mask = 255 * mask.astype(int)
+        wordcloud = WordCloud(background_color="white", max_font_size=40, mask=mask).generate(text)
+
+        figure = plt.figure()
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+        pw.addPlot(group["name"] + "'s Targets", figure)
+
+    pw.show()
 
 def prepareDataToShow():
     analiticsJson = prepareDataGroups()
