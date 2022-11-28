@@ -254,8 +254,7 @@ def prepareDataTargets(analiticsJson):
                 for object in temp:
                     if "targets" not in object.keys():
                         object["targets"] = []
-                    if it[0] not in object["targets"]:
-                        object["targets"].append(it[0])
+                    object["targets"].append(it[0])
 
     f.close()
 
