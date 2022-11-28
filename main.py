@@ -73,7 +73,7 @@ def readFiles():
             fileAllTweets.truncate()
     fileAllTweets.close()
 
-    df = pd.read_csv(fileName, delimiter=';', encoding="ansi")
+    df = pd.read_csv(fileName, delimiter=';')
     df.columns = ['id', 'date', 'text', 'user', 'location']
 
     return df
@@ -109,17 +109,17 @@ def textCleaning(corpus):
     return corpus
 
 def doIdentifications(corpus):
-    fileName = "identification.txt"
+    fileName = "./entities/identification-targets.txt"
 
     nlp = spacy.load("en_core_web_sm")
     identify(corpus, nlp, fileName)
 
-    fileName = "identification-2.txt"
+    fileName = "./entities/identification-attacks.txt"
 
     nlp = spacy.load("custom-models/attack-model/")
     identify(corpus, nlp, fileName)
 
-    fileName = "identification-3.txt"
+    fileName = "./entities/identification-groups.txt"
 
     nlp = spacy.load("custom-models/group-model/")
     identify(corpus, nlp, fileName)
