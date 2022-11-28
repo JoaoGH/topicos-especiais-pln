@@ -116,7 +116,7 @@ def doIdentifications(corpus):
 
     fileName = "identification-2.txt"
 
-    nlp = spacy.load("./model-best/")
+    nlp = spacy.load("custom-models/attack-model/")
     identify(corpus, nlp, fileName)
 
 def identify(corpus, nlp, fileName):
