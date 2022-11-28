@@ -6,6 +6,10 @@ import csv
 import re
 import spacy
 import os
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+import numpy
+import window
 
 def findTweet():
     consumer_key = "s29T1F9InPxHrsWruI6ALmOWO"
@@ -147,6 +151,35 @@ def pipeline():
 
 def showGraphics():
     prepareDataToShow()
+
+    pw = window.plotWindow()
+    ataques = ["Ataque 1", "Ataque 2", "Ataque 3", "Ataque 4"]
+    total = [4, 7, 8, 12]
+    figure = plt.figure()
+    plt.bar(ataques, total)
+    plt.ylabel("Total ataques")
+    plt.xlabel("Tipos de ataques")
+    pw.addPlot("Grupo A", figure)
+
+
+    ## -------------------
+
+    text = open("identification.txt", "r").read()
+    # wordcloud = WordCloud().generate(text)
+    # plt.imshow(wordcloud, interpolation='bilinear')
+    # plt.axis("off")
+    x, y = numpy.ogrid[:300, :300]
+    mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
+    mask = 255 * mask.astype(int)
+    wordcloud = WordCloud(background_color="white", max_font_size=40, mask=mask).generate(text)
+    # plt.figure()
+
+    figure = plt.figure()
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+    pw.addPlot("Bag", figure)
+
+    pw.show()
     analiticsJson = {}
 
 def prepareDataToShow():
