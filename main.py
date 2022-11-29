@@ -1,9 +1,15 @@
+import time
+from datetime import datetime
 import tweepy
 import pandas as pd
 import csv
 import re
 import spacy
 import os
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+import numpy
+import window
 
 def findTweet():
     consumer_key = "s29T1F9InPxHrsWruI6ALmOWO"
@@ -15,15 +21,34 @@ def findTweet():
     auth.set_access_token(access_key, access_secret)
     
     api = tweepy.API(auth,wait_on_rate_limit=True)
-    
-    csvFile = open('file-name', 'w')
+
+    filename = str(datetime.now().replace(microsecond=0).isoformat()).replace(':', '-')
+    csvFile = open('./corpus/' + filename, 'w')
     csvWriter = csv.writer(csvFile,delimiter=";")
-    
-    search_words = "cyberattack OR \"zero day\" OR ramsonware" # enter your words
-    new_search = search_words + " -filter:retweets"
-    
-    for tweet in tweepy.Cursor(api.search_tweets,q=new_search,count=100,lang="en",since_id=0,include_entities=True).items():
-        csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'),tweet.user.screen_name.encode('utf-8'), tweet.user.location.encode('utf-8')])
+
+    search_words = ""
+    print("1 - Informar argumentos para a busca")
+    print("2 - Realizar busca com base no dicionario")
+    opc = int(input())
+    if (opc == 1):
+        palavras = input("\tEntre com uma lista de argumentos para busca separados por ','")
+        search_words = palavras.split(",")
+    else:
+        f = open("attacks_dictionary.txt", 'r')
+        search_words = []
+        for line in f:
+            search_words.append(line.strip().lower())
+
+    print("Realizando busca dos tweets...")
+    for it in search_words:
+        new_search = it + " -filter:retweets"
+        max = 0
+        for tweet in tweepy.Cursor(api.search_tweets, q=new_search, count=400, lang="en", since_id=0, include_entities=True).items():
+            max = max + 1
+            if (max == 500):
+                break
+            csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'), tweet.user.screen_name.encode('utf-8'), tweet.user.location.encode('utf-8')])
+    print("Busca finalizada com sucesso.")
 
 def readFiles():
     nomeArquivos = os.listdir("./corpus/")
@@ -33,19 +58,23 @@ def readFiles():
     if os.path.isfile(fileName):
         os.remove(fileName)
 
-    f2 = open(fileName, "a")
-    f2.write("date;text;user;location\n")
+    fileAllTweets = open(fileName, "a")
+    fileAllTweets.write("id;date;text;user;location\n")
 
+    i = 0
     for it in nomeArquivos:
+        if (it == "all.csv"):
+            continue
         with open("./corpus/" + it, "r") as reader:
             for line in reader:
                 if line.strip():
-                    f2.write(line)
-            f2.truncate()
-    f2.close()
+                    i = i + 1
+                    fileAllTweets.write(str(i) + ";" + line)
+            fileAllTweets.truncate()
+    fileAllTweets.close()
 
-    df = pd.read_csv(fileName, delimiter=';', encoding="ansi")
-    df.columns = ['date', 'text', 'user', 'location']
+    df = pd.read_csv(fileName, delimiter=';')
+    df.columns = ['id', 'date', 'text', 'user', 'location']
 
     return df
 
@@ -56,19 +85,21 @@ def lowerCase(corpus):
 
 def removeSpecialChar(corpus):
     linkRegex = r"(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)"
-    noSpecialRegex = r"[^a-zA-Z0-9 \.\,\']"
+    noSpecialRegex = r"[^a-zA-Z0-9 \.\,\'\@]"
     hexValue = r"\\[xX]{1}[abcdefABCDEF0-9]{2}"
+    byteRegex = r"^(['\"]?b['\"])"
 
+    corpus["text"] = corpus["text"].map(lambda x: re.sub(byteRegex, '', x))
+    corpus["text"] = corpus["text"].map(lambda x: re.sub(hexValue, '', x))
     corpus["text"] = corpus["text"].map(lambda x: re.sub(linkRegex, '', x))
     corpus["text"] = corpus["text"].map(lambda x: re.sub(noSpecialRegex, '', x))
-    corpus["text"] = corpus["text"].map(lambda x: re.sub(hexValue, '', x))
 
     return corpus
 
 def textCleaning(corpus):
     dictionary = []
 
-    f = open('dictionary.txt', 'r')
+    f = open('groups_dictionary.txt', 'r')
     for line in f:
         dictionary.append(line.strip().lower())
     f.close()
@@ -77,35 +108,177 @@ def textCleaning(corpus):
 
     return corpus
 
-def identifyEntities(corpus):
+def doIdentifications(corpus):
+    fileName = "./entities/identification-targets.txt"
+
     nlp = spacy.load("en_core_web_sm")
+    identify(corpus, nlp, fileName)
 
-    f = open("entities.txt", "w")
+    fileName = "./entities/identification-attacks.txt"
 
-    lista = corpus["text"]
+    nlp = spacy.load("custom-models/attack-model/")
+    identify(corpus, nlp, fileName)
 
-    for item in lista:
-        doc = nlp(item)
+    fileName = "./entities/identification-groups.txt"
+
+    nlp = spacy.load("custom-models/group-model/")
+    identify(corpus, nlp, fileName)
+
+def identify(corpus, nlp, fileName):
+    f = open(fileName, "w")
+
+    for i in range(0, len(corpus)):
+        doc = nlp(corpus.iloc[i].text)
+        id = corpus.iloc[i].id
         v = []
         for ent in doc.ents:
             v.append([ent.text, ent.label_])
         if v:
-            f.write(str(v))
+            f.write(str(id) + ";" + str(v))
             f.write("\n")
 
     f.close()
 
-dataFrame = readFiles()
-print(len(dataFrame))
+def pipeline():
+    print("Executando pipeline...")
 
-dataFrame = lowerCase(dataFrame)
-dataFrame = textCleaning(dataFrame)
-dataFrame = removeSpecialChar(dataFrame)
+    dataFrame = readFiles()
 
-identifyEntities(dataFrame)
+    dataFrame = lowerCase(dataFrame)
+    dataFrame = textCleaning(dataFrame)
+    dataFrame = removeSpecialChar(dataFrame)
 
-print(len(dataFrame))
+    doIdentifications(dataFrame)
 
-print('end')
+    print("Pipeline executado com sucesso.")
+    print()
+    return dataFrame
+
+def showGraphics():
+    analiticsJson = prepareDataToShow()
+
+    pw = window.plotWindow()
+    for group in analiticsJson["groups"]:
+        ataques = group["methods"].keys()
+        total = group["methods"].values()
+        figure = plt.figure()
+        plt.bar(ataques, total)
+        plt.ylabel("Total ataques")
+        plt.xlabel("Tipos de ataques")
+        pw.addPlot(group["name"], figure)
+
+    ## -------------------
+
+    for group in analiticsJson["groups"]:
+        text = "\n".join(group["targets"])
+        # wordcloud = WordCloud().generate(text)
+        # plt.imshow(wordcloud, interpolation='bilinear')
+        # plt.axis("off")
+        x, y = numpy.ogrid[:300, :300]
+        mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
+        mask = 255 * mask.astype(int)
+        wordcloud = WordCloud(background_color="white", max_font_size=40, mask=mask).generate(text)
+
+        figure = plt.figure()
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+        pw.addPlot(group["name"] + "'s Targets", figure)
+
+    pw.show()
+
+def prepareDataToShow():
+    analiticsJson = prepareDataGroups()
+    analiticsJson = prepareDataMethods(analiticsJson)
+    analiticsJson = prepareDataTargets(analiticsJson)
+
+    return analiticsJson
+
+def prepareDataGroups():
+    f = open("./entities/identification-groups.txt", "r")
+
+    analiticsJson["groups"] = []
+    id = 0
+
+    for line in f.readlines():
+        obj = {}
+
+        id += 1
+        obj["id"] = id
+
+        for it in eval(line.split(";")[1]):
+            existente = [x for x in analiticsJson["groups"] if it[1] == x["name"]]
+            if not existente:
+                obj["name"] = it[1]
+            else:
+                existente[0]["tweets"].append(int(line.split(";")[0]))
+                continue
+            if not "tweets" in obj.keys():
+                obj["tweets"] = []
+            obj["tweets"].append(int(line.split(";")[0]))
+
+        if len(obj.keys()) > 1:
+            analiticsJson.get("groups").append(obj)
+
+    f.close()
+
+    return analiticsJson
+
+def prepareDataMethods(analiticsJson):
+    f = open("./entities/identification-attacks.txt", "r")
+
+    for line in f.readlines():
+        tweet = int(line.split(";")[0])
+        for it in eval(line.split(";")[1]):
+            temp = [x for x in analiticsJson["groups"] if tweet in x["tweets"]]
+            for object in temp:
+                if "methods" not in object.keys():
+                    object["methods"] = {}
+                if it[1] not in object["methods"].keys():
+                    object["methods"][it[1]] = 0
+                object["methods"][it[1]] = object["methods"][it[1]] + 1
+
+    f.close()
+
+    return analiticsJson
+
+def prepareDataTargets(analiticsJson):
+    f = open("./entities/identification-targets.txt", "r")
+
+    for line in f.readlines():
+        tweet = int(line.split(";")[0])
+        for it in eval(line.split(";")[1]):
+            if it[1] in ("GPE", "ORG", "NORP"):
+                temp = [x for x in analiticsJson["groups"] if tweet in x["tweets"]]
+                for object in temp:
+                    if "targets" not in object.keys():
+                        object["targets"] = []
+                    object["targets"].append(it[0])
+
+    f.close()
+
+    return analiticsJson
+
+analiticsJson = {}
+dataFrame = None
+opc = 0
+while opc != 4:
+    print()
+    print("--------- Topicos Especiais - NLP ---------")
+    print("1 - Buscar tweets")
+    print("2 - Executar pipeline")
+    print("3 - Analisar dados")
+    print("4 - Sair")
+    opc = int(input())
+    print()
+
+    if opc == 1:
+        findTweet()
+    elif opc == 2:
+        dataFrame = pipeline()
+    elif opc == 3:
+        showGraphics()
+
+
+
 
 

@@ -1,0 +1,76 @@
+{
+  "lang":"en",
+  "name":"pipeline",
+  "version":"0.0.0",
+  "spacy_version":">=3.4.2,<3.5.0",
+  "description":"",
+  "author":"",
+  "email":"",
+  "url":"",
+  "license":"",
+  "spacy_git_version":"3d0e89536",
+  "vectors":{
+    "width":300,
+    "vectors":20000,
+    "keys":514157,
+    "name":"en_vectors",
+    "mode":"default"
+  },
+  "labels":{
+    "tok2vec":[
+
+    ],
+    "ner":[
+      "Credential Hervesting",
+      "DDoS",
+      "Phishing",
+      "Ransomware",
+      "SQL Injection"
+    ]
+  },
+  "pipeline":[
+    "tok2vec",
+    "ner"
+  ],
+  "components":[
+    "tok2vec",
+    "ner"
+  ],
+  "disabled":[
+
+  ],
+  "performance":{
+    "ents_f":0.5454545455,
+    "ents_p":0.6363636364,
+    "ents_r":0.4772727273,
+    "ents_per_type":{
+      "SQL Injection":{
+        "p":0.6666666667,
+        "r":0.5,
+        "f":0.5714285714
+      },
+      "DDoS":{
+        "p":0.8333333333,
+        "r":0.8333333333,
+        "f":0.8333333333
+      },
+      "Ransomware":{
+        "p":0.5,
+        "r":0.3,
+        "f":0.375
+      },
+      "Phishing":{
+        "p":0.5555555556,
+        "r":0.4545454545,
+        "f":0.5
+      },
+      "Credential Hervesting":{
+        "p":0.6666666667,
+        "r":0.4,
+        "f":0.5
+      }
+    },
+    "tok2vec_loss":34.8953784564,
+    "ner_loss":661.6183217166
+  }
+}
